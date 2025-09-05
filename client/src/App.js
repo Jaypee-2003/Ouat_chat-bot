@@ -4,6 +4,7 @@ import About from './components/About';
 import Courses from './components/Courses';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ChatWidget from './components/ChatWidget';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Courses />
       <Contact />
       <Footer />
+      <ChatWidget />
     </div>
   );
 }
