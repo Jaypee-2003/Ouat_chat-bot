@@ -9,7 +9,15 @@ const ChatWidget = () => {
   const [sessionId, setSessionId] = useState(null);
   const messagesEndRef = useRef(null);
 
-  const toggleOpen = () => setIsOpen((prev) => !prev);
+  const toggleOpen = () => {
+    if (isOpen) {
+      // When closing chat, clear messages and session
+      setMessages([]);
+      setSessionId(null);
+      localStorage.removeItem('ouat_chat_session');
+    }
+    setIsOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -17,33 +25,29 @@ const ChatWidget = () => {
     }
   }, [isOpen, messages]);
 
-  // Initialize or restore sessionId
+  // Initialize sessionId only when chat is opened
   useEffect(() => {
-    const existing = localStorage.getItem('ouat_chat_session');
-    if (existing) {
-      setSessionId(existing);
-    } else {
+    if (isOpen && !sessionId) {
       const newId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-      localStorage.setItem('ouat_chat_session', newId);
       setSessionId(newId);
     }
-  }, []);
-
-  // Fetch history when opening chat
-  useEffect(() => {
-    const fetchHistory = async () => {
-      if (!isOpen || !sessionId) return;
-      try {
-        const res = await axios.get('/api/chat/history', { params: { sessionId } });
-        const history = Array.isArray(res?.data?.messages) ? res.data.messages : [];
-        const normalized = history.map((m) => ({ id: m.id || String(m._id || Math.random()), sender: m.sender, text: m.text, createdAt: m.createdAt }));
-        setMessages(normalized);
-      } catch (err) {
-        // ignore history errors for UX
-      }
-    };
-    fetchHistory();
   }, [isOpen, sessionId]);
+
+  // Remove history fetching since we want fresh chat each time
+  // useEffect(() => {
+  //   const fetchHistory = async () => {
+  //     if (!isOpen || !sessionId) return;
+  //     try {
+  //       const res = await axios.get('/api/chat/history', { params: { sessionId } });
+  //       const history = Array.isArray(res?.data?.messages) ? res.data.messages : [];
+  //       const normalized = history.map((m) => ({ id: m.id || String(m._id || Math.random()), sender: m.sender, text: m.text, createdAt: m.createdAt }));
+  //       setMessages(normalized);
+  //     } catch (err) {
+  //       // ignore history errors for UX
+  //     }
+  //   };
+  //   fetchHistory();
+  // }, [isOpen, sessionId]);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -59,7 +63,6 @@ const ChatWidget = () => {
       const response = await axios.post('/api/chat', { message: text, sessionId });
       const returnedSession = response?.data?.sessionId;
       if (returnedSession && returnedSession !== sessionId) {
-        localStorage.setItem('ouat_chat_session', returnedSession);
         setSessionId(returnedSession);
       }
       const botText = response?.data?.fulfillmentText || 'Sorry, I could not understand that.';
