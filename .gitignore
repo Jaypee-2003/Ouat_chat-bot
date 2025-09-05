@@ -1,0 +1,28 @@
+node_modules/
+**/node_modules/
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+**/.env
+.env.local
+.env.*.local
+
+# Build output
+build/
+**/build/
+dist/
+**/dist/
+
+# Coverage
+coverage/
+**/coverage/
+
+# Editor/OS
+.vscode/
+.idea/
+Thumbs.db
