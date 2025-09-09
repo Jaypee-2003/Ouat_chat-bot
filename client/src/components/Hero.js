@@ -8,8 +8,8 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-green-600/50 to-transparent"></div>
       
       {/* Content */}
-      <div className="relative z-10 text-center text-white px-4 max-w-6xl mx-auto">
-        <div className="mb-8">
+      <div className="relative z-10 text-center text-white">
+        <div className="mb-0 mt-16 md:mt-0 md:mb-8">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             Orissa University of
             <span className="block text-yellow-300">Agriculture & Technology</span>
@@ -29,7 +29,7 @@ const Hero = () => {
         </div>
         
         {/* Stats */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div className="mt-0 grid grid-cols-1 md:grid-cols-3 gap-0 max-w-4xl mx-auto md:mt-16 md:gap-8">
           <div className="text-center">
             <div className="text-3xl md:text-4xl font-bold text-yellow-300 mb-2">50+</div>
             <div className="text-lg">Years of Excellence</div>
